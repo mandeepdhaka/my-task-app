@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks App</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Tasks App</h1>
+        <nav>
+            <ul>
+                <li id="home-link"><a href="{% url 'dashboard' %}">Home</a></li>
+                <li id="login-link"><a href="{% url 'login' %}">Login</a></li>
+                <li id="register-link"><a href="{% url 'register' %}">Register</a></li>
+                <li id="logout-link" style="display: none;"><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script src="{% static 'tasks/script.js' %}"></script>
+    <script>
+        // Check if user is logged in
+        function updateAuthLinks() {
+            const accessToken = localStorage.getItem('access');
+            if (accessToken) {
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('register-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'inline';
+            } else {
+                document.getElementById('login-link').style.display = 'inline';
+                document.getElementById('register-link').style.display = 'inline';
+                document.getElementById('logout-link').style.display = 'none';
+                document.getElementById('home-link').style.display = 'none';
+            }
+        }
+
+        // Call this function to update links based on authentication status
+        updateAuthLinks();
+
+        // Function to handle logout
+        function logout() {
+            axios.post('/logout/', {
+            }, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('access')
+                }
+            })
+            .then(response => {
+                localStorage.removeItem('access');
+                localStorage.removeItem('refresh');
+                updateAuthLinks();
+                window.location.href = '/login/';
+            })
+            .catch(error => {
+                localStorage.removeItem('access');
+                localStorage.removeItem('refresh');
+                updateAuthLinks();
+                window.location.href = '/login/';
+            });
+            
+        }
+    </script>
+</body>
+</html>

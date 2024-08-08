@@ -1,0 +1,37 @@
+{% extends 'tasks/base.html' %} 
+{% block content %}
+<h2>Login</h2>
+<form id="login-form">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Login</button>
+</form>
+<div id="login-message"></div>
+<script>
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        axios.post('/event/login/', {
+            username: username,
+            password: password
+        })
+        .then(response => {
+            localStorage.setItem('access', response.data.access);
+            localStorage.setItem('refresh', response.data.refresh);
+            localStorage.setItem('username',response.data.user.username);
+            document.getElementById('login-message').innerText = 'Login successful!';
+            document.getElementById('login-message').classList.add('success');
+            window.location.href = '{% url "dashboard" %}';
+            
+        })
+        .catch(error => {
+            document.getElementById('login-message').innerText = 'Login failed!';
+            document.getElementById('login-message').classList.add('error');
+        });
+    });
+</script>
+{% endblock %}

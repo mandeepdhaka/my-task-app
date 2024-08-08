@@ -1,0 +1,142 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #4CAF50;
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+main {
+    width: 100%;
+    max-width: 800px;
+    padding: 2em;
+    box-sizing: border-box;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 2em 0;
+    border-radius: 8px;
+}
+
+h2 {
+    color: #4CAF50;
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+form label {
+    margin-bottom: 0.5em;
+    font-weight: bold;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="date"],
+form input[type="email"] {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 0.7em;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2em;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 0.8em;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+#tasks-message,
+#task-message,
+#login-message,
+#register-message {
+    margin-top: 1em;
+    padding: 1em;
+    border-radius: 4px;
+}
+
+#tasks-message.error,
+#task-message.error,
+#login-message.error,
+#register-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+#tasks-message.success,
+#task-message.success,
+#login-message.success,
+#register-message.success {
+    background-color: #d4edda;
+    color: #155724;
+}

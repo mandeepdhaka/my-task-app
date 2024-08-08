@@ -1,0 +1,96 @@
+{% extends 'tasks/base.html' %}
+{% block content %}
+<h2>Welcome, <span id="username-display"></span>!</h2>
+<h2>My Tasks</h2>
+<input type="text" id="search-title" placeholder="Search by Title">
+<button id="search-button">Search</button>
+<button id="load-tasks">Load Tasks</button>
+<p id="task-counter">Total Tasks: 0</p>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Due Date</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tasks-table-body">
+    </tbody>
+</table>
+<div id="tasks-message"></div>
+
+<h2>Add Task</h2>
+<form id="task-form">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" placeholder="Title" required>
+    <label for="due_date">Due Date:</label>
+    <input type="date" id="due_date" name="due_date" required>
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" placeholder="Category">
+    <button type="submit">Add Task</button>
+</form>
+<div id="task-message"></div>
+
+<script>
+   const username = localStorage.getItem('username');
+
+    // Display the username on the page
+    if (username) {
+        document.getElementById('username-display').textContent = username;
+    } else {
+        document.getElementById('username-display').textContent = 'Guest';
+    }
+
+
+    document.getElementById('task-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const title = document.getElementById('title').value;
+        const due_date = document.getElementById('due_date').value;
+        const category = document.getElementById('category').value;
+
+        axios.post('/tasks/add/', {
+            title: title,
+            due_date: due_date,
+            category: category
+        }, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('access')
+            }
+        })
+        .then(response => {
+            document.getElementById('task-message').innerText = 'Task added successfully!';
+            document.getElementById('task-message').classList.add('success');
+            document.getElementById('title').value = '';
+            document.getElementById('due_date').value = '';
+            document.getElementById('category').value = '';
+            loadTasks();
+        })
+        .catch(error => {
+            document.getElementById('task-message').innerText = 'Failed to add task!';
+            document.getElementById('task-message').classList.add('error');
+        });
+    });
+
+    document.getElementById('load-tasks').addEventListener('click', function() {
+        axios.get('/tasks/', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('access')
+            }
+        })
+        .then(response => {
+            const tasksTableBody = document.getElementById('tasks-table-body');
+            tasksTableBody.innerHTML = '';
+            response.data.forEach(task => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${task.title}</td><td>${task.due_date}</td><td>${task.category}</td>`;
+                tasksTableBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            document.getElementById('tasks-message').innerText = 'Failed to load tasks!';
+            document.getElementById('tasks-message').classList.add('error');
+        });
+    });
+</script>
+{% endblock %}
